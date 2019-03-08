@@ -33,7 +33,7 @@ import okhttp3.RequestBody;
  */
 public class LoginBackManager {
 
-    private static final String BASE_URL="http://login.gdpgold.com";
+    private static final String BASE_URL="http://korsdk.appcpi.com";
 
     /**
      * 获取验证码
