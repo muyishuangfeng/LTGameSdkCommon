@@ -7,6 +7,8 @@ public class ResultData {
     private String lt_uid;
     //token
     private String api_token;
+    //乐推uidToken
+    private String lt_uid_token;
     //乐推订单ID
     private String lt_order_id;
 
@@ -41,5 +43,13 @@ public class ResultData {
 
     public void setLt_order_id(String lt_order_id) {
         this.lt_order_id = lt_order_id;
+    }
+
+    public String getLt_uid_token() {
+        return lt_uid_token;
+    }
+
+    public void setLt_uid_token(String lt_uid_token) {
+        this.lt_uid_token = lt_uid_token;
     }
 }
