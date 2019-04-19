@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.gnetop.ltgamecommon.R;
+import com.gnetop.ltgamecommon.base.Constants;
 import com.gnetop.ltgamecommon.impl.OnCreateOrderListener;
 import com.gnetop.ltgamecommon.impl.OnGooglePlayResultListener;
 import com.gnetop.ltgamecommon.impl.OnLoginSuccessListener;
@@ -17,6 +18,7 @@ import com.gnetop.ltgamecommon.model.WeChatBean;
 import com.gnetop.ltgamecommon.model.WeChatModel;
 import com.gnetop.ltgamecommon.net.Api;
 import com.gnetop.ltgamecommon.util.MD5Util;
+import com.gnetop.ltgamecommon.util.PreferencesUtils;
 import com.google.gson.Gson;
 
 import java.util.Map;
@@ -33,7 +35,7 @@ import okhttp3.RequestBody;
  */
 public class LoginBackManager {
 
-    private static final String BASE_URL="http://korsdk.appcpi.com";
+    private static final String BASE_URL = "http://korsdk.appcpi.com";
 
     /**
      * 获取验证码
@@ -43,7 +45,7 @@ public class LoginBackManager {
      * @param params    手机号
      * @param mListener 接口回调
      */
-    public static void getAuthenticationCode(Context context,  String LTAppID, String LTAppKey,
+    public static void getAuthenticationCode(Context context, String LTAppID, String LTAppKey,
                                              Map<String, Object> params,
                                              final OnLoginSuccessListener mListener) {
         if (!TextUtils.isEmpty(LTAppID) &&
@@ -106,7 +108,7 @@ public class LoginBackManager {
      *                  //@param password  密码
      * @param mListener 接口回调
      */
-    public static void register(Context context,  String LTAppID, String LTAppKey,
+    public static void register(Context context, String LTAppID, String LTAppKey,
                                 Map<String, Object> params,
                                 final OnLoginSuccessListener mListener) {
         if (!TextUtils.isEmpty(LTAppID) &&
@@ -170,7 +172,7 @@ public class LoginBackManager {
      *                  //@param password  密码
      * @param mListener 接口回调
      */
-    public static void login(Context context,  String LTAppID, String LTAppKey,
+    public static void login(Context context, String LTAppID, String LTAppKey,
                              Map<String, Object> map,
                              final OnLoginSuccessListener mListener) {
         if (!TextUtils.isEmpty(LTAppID) &&
@@ -236,7 +238,7 @@ public class LoginBackManager {
      *                  //@param password  密码
      * @param mListener 接口回调
      */
-    public static void updatePassword(Context context,  String LTAppID, String LTAppKey,
+    public static void updatePassword(Context context, String LTAppID, String LTAppKey,
                                       Map<String, Object> map,
                                       final OnLoginSuccessListener mListener) {
         if (!TextUtils.isEmpty(LTAppID) &&
@@ -305,7 +307,7 @@ public class LoginBackManager {
      *                  //@param lang       语言
      * @param mListener 接口回调
      */
-    public static void getDeviceInfo(Context context,  String LTAppID, String LTAppKey, Map<String, Object> map,
+    public static void getDeviceInfo(Context context, String LTAppID, String LTAppKey, Map<String, Object> map,
                                      final OnLoginSuccessListener mListener) {
         if (!TextUtils.isEmpty(LTAppID) &&
                 !TextUtils.isEmpty(LTAppKey) &&
@@ -369,7 +371,7 @@ public class LoginBackManager {
      *                  //@param platform    平台
      * @param mListener 接口回调
      */
-    public static void googleLogin(Context context, String LTAppID,
+    public static void googleLogin(final Context context, String LTAppID,
                                    String LTAppKey, Map<String, Object> map,
                                    final OnLoginSuccessListener mListener) {
         if (!TextUtils.isEmpty(LTAppID) &&
@@ -395,6 +397,19 @@ public class LoginBackManager {
                                     if (mListener != null) {
                                         mListener.onSuccess(result);
                                     }
+                                    if (!TextUtils.isEmpty(result.getData().getApi_token())) {
+                                        PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
+                                                result.getData().getApi_token());
+                                    }
+                                    if (!TextUtils.isEmpty(result.getData().getLt_uid())) {
+                                        PreferencesUtils.putString(context, Constants.USER_LT_UID,
+                                                result.getData().getLt_uid());
+                                    }
+                                    if (!TextUtils.isEmpty(result.getData().getLt_uid_token())) {
+                                        PreferencesUtils.putString(context, Constants.USER_LT_UID_TOKEN,
+                                                result.getData().getLt_uid_token());
+                                    }
+
                                 } else if (TextUtils.equals(result.getResult(), "NO")) {
                                     if (mListener != null) {
                                         mListener.onError(result.getMsg());
@@ -432,7 +447,7 @@ public class LoginBackManager {
      *                  //@param accessToken facebook返回的Token
      * @param mListener 接口回调
      */
-    public static void facebookLogin(Context context, String LTAppID,
+    public static void facebookLogin(final Context context, String LTAppID,
                                      String LTAppKey, Map<String, Object> map,
                                      final OnLoginSuccessListener mListener) {
         if (!TextUtils.isEmpty(LTAppID) &&
@@ -457,6 +472,18 @@ public class LoginBackManager {
                                 if (TextUtils.equals(result.getResult(), "OK")) {
                                     if (mListener != null) {
                                         mListener.onSuccess(result);
+                                    }
+                                    if (!TextUtils.isEmpty(result.getData().getApi_token())) {
+                                        PreferencesUtils.putString(context, Constants.USER_API_TOKEN,
+                                                result.getData().getApi_token());
+                                    }
+                                    if (!TextUtils.isEmpty(result.getData().getLt_uid())) {
+                                        PreferencesUtils.putString(context, Constants.USER_LT_UID,
+                                                result.getData().getLt_uid());
+                                    }
+                                    if (!TextUtils.isEmpty(result.getData().getLt_uid_token())) {
+                                        PreferencesUtils.putString(context, Constants.USER_LT_UID_TOKEN,
+                                                result.getData().getLt_uid_token());
                                     }
                                 } else if (TextUtils.equals(result.getResult(), "NO")) {
                                     if (mListener != null) {
@@ -496,7 +523,7 @@ public class LoginBackManager {
      *                  //@param accessToken 微信返回的Token
      * @param mListener 接口回调
      */
-    private static void weChatLogin(Context context,  String LTAppID,
+    private static void weChatLogin(Context context, String LTAppID,
                                     String LTAppKey, Map<String, Object> map,
                                     final OnLoginSuccessListener mListener) {
         if (!TextUtils.isEmpty(LTAppID) &&
@@ -559,7 +586,7 @@ public class LoginBackManager {
      *                  //@param openID      qq的openID
      * @param mListener 接口回调
      */
-    public static void qqLogin(Context context,  String LTAppID,
+    public static void qqLogin(Context context, String LTAppID,
                                String LTAppKey, Map<String, Object> map,
                                final OnLoginSuccessListener mListener) {
         if (!TextUtils.isEmpty(LTAppID) &&
@@ -622,7 +649,7 @@ public class LoginBackManager {
      * @param code      请求码
      */
     public static void getAccessToken(final Context context, String appID, String appSecret,
-                                      String code,  final String LTAppID,
+                                      String code, final String LTAppID,
                                       final String LTAppKey,
                                       final OnLoginSuccessListener listener) {
         Api.getInstance("https://api.weixin.qq.com/sns/oauth2/access_token")
@@ -660,7 +687,6 @@ public class LoginBackManager {
 
     /**
      * 阿里
-     *
      */
     public static void aliPlay(String url, WeakHashMap<String, String> map, final OnPlayResultedListener mListener) {
         Api.getInstance(url)
@@ -700,10 +726,9 @@ public class LoginBackManager {
 
     /**
      * 微信
-     *
      */
     public static void weChatPlay(String url, WeakHashMap<String, String> map,
-                                 final OnPlayResultedListener mListener) {
+                                  final OnPlayResultedListener mListener) {
         Api.getInstance(url)
                 .weChatPlay(map)
                 .subscribeOn(Schedulers.io())
@@ -743,7 +768,7 @@ public class LoginBackManager {
     /**
      * 创建订单
      */
-    public static void createOrder( String LTAppID, String LTAppKey,
+    public static void createOrder(Context context, String LTAppID, String LTAppKey,
                                    Map<String, Object> params,
                                    final OnCreateOrderListener mListener) {
         Log.e("GooglePayActivity", "start");
@@ -755,102 +780,91 @@ public class LoginBackManager {
             String json = new Gson().toJson(params);//要传递的json
             final RequestBody requestBody = RequestBody
                     .create(okhttp3.MediaType.parse("application/json; charset=utf-8"), json);
-            Api.getInstance(BASE_URL)
-                    .createOrder(LTAppID, LTToken, (int) LTTime, requestBody)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<BaseEntry<ResultData>>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
+            if (TextUtils.isEmpty(PreferencesUtils.getString(context, Constants.USER_API_TOKEN))) {
+                Api.getInstance(BASE_URL)
+                        .createOrder(LTAppID, LTToken, (int) LTTime, requestBody)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<BaseEntry<ResultData>>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onNext(BaseEntry<ResultData> result) {
-                            if (result!=null){
-                                if (result.getCode() == 200) {
-                                    if (result.getData().getLt_order_id() != null) {
-                                        mListener.onOrderSuccess(result.getData().getLt_order_id());
+                            @Override
+                            public void onNext(BaseEntry<ResultData> result) {
+                                if (result != null) {
+                                    if (result.getCode() == 200) {
+                                        if (result.getData().getLt_order_id() != null) {
+                                            mListener.onOrderSuccess(result.getData().getLt_order_id());
+                                        }
+                                    } else {
+                                        mListener.onOrderError(result.getMsg());
                                     }
-                                } else {
-                                    mListener.onOrderError(result.getMsg());
                                 }
                             }
-                        }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.e("GooglePayActivity", e.getMessage());
-                            mListener.onOrderFailed(e);
-                        }
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.e("GooglePayActivity", e.getMessage());
+                                mListener.onOrderFailed(e);
+                            }
 
-                        @Override
-                        public void onComplete() {
-                            Log.e("GooglePayActivity", "onComplete");
-                        }
-                    });
-        }
-    }
-    /**
-     * 创建订单
-     */
-    public static void createOrder( String LTAppID, String LTAppKey,
-                                   Map<String, Object> params,
-                                   String apiToken,
-                                   final OnCreateOrderListener mListener) {
-        Log.e("GooglePayActivity", "start");
-        if (params != null &&
-                !TextUtils.isEmpty(LTAppID) &&
-                !TextUtils.isEmpty(LTAppKey)&&
-                !TextUtils.isEmpty(apiToken)) {
-            long LTTime = System.currentTimeMillis() / 1000L;
-            String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
-            String json = new Gson().toJson(params);//要传递的json
-            final RequestBody requestBody = RequestBody
-                    .create(okhttp3.MediaType.parse("application/json; charset=utf-8"), json);
-            Api.getInstance(BASE_URL)
-                    .createOrder(LTAppID, LTToken, (int) LTTime, apiToken,requestBody)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<BaseEntry<ResultData>>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
+                            @Override
+                            public void onComplete() {
+                                Log.e("GooglePayActivity", "onComplete");
+                            }
+                        });
+            } else {
+                Api.getInstance(BASE_URL)
+                        .createOrder(LTAppID, LTToken, (int) LTTime,
+                                PreferencesUtils.getString(context, Constants.USER_API_TOKEN),
+                                requestBody)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<BaseEntry<ResultData>>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
 
-                        }
+                            }
 
-                        @Override
-                        public void onNext(BaseEntry<ResultData> result) {
-                            if (result!=null){
-                                if (result.getCode() == 200) {
-                                    if (result.getData().getLt_order_id() != null) {
-                                        mListener.onOrderSuccess(result.getData().getLt_order_id());
+                            @Override
+                            public void onNext(BaseEntry<ResultData> result) {
+                                if (result != null) {
+                                    if (result.getCode() == 200) {
+                                        if (result.getData().getLt_order_id() != null) {
+                                            mListener.onOrderSuccess(result.getData().getLt_order_id());
+                                        }
+                                    } else {
+                                        mListener.onOrderError(result.getMsg());
                                     }
-                                } else {
-                                    mListener.onOrderError(result.getMsg());
                                 }
                             }
-                        }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.e("GooglePayActivity", e.getMessage());
-                            mListener.onOrderFailed(e);
-                        }
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.e("GooglePayActivity", e.getMessage());
+                                mListener.onOrderFailed(e);
+                            }
 
-                        @Override
-                        public void onComplete() {
-                            Log.e("GooglePayActivity", "onComplete");
-                        }
-                    });
+                            @Override
+                            public void onComplete() {
+                                Log.e("GooglePayActivity", "onComplete");
+                            }
+                        });
+            }
+
+
         }
     }
+
 
     /**
      * google
      */
     public static void googlePlay(String LTAppID, String LTAppKey,
-                                 Map<String, Object> params,
-                                 final OnGooglePlayResultListener mListener) {
+                                  Map<String, Object> params,
+                                  final OnGooglePlayResultListener mListener) {
         if (params != null &&
                 !TextUtils.isEmpty(LTAppID) &&
                 !TextUtils.isEmpty(LTAppKey)) {
@@ -897,8 +911,8 @@ public class LoginBackManager {
      * oneStore
      */
     public static void oneStorePlay(String LTAppID, String LTAppKey,
-                                   Map<String, Object> params,
-                                   final onOneStoreUploadListener mListener) {
+                                    Map<String, Object> params,
+                                    final onOneStoreUploadListener mListener) {
         if (params != null &&
                 !TextUtils.isEmpty(LTAppID) &&
                 !TextUtils.isEmpty(LTAppKey)) {
