@@ -24,21 +24,18 @@ public interface RetrofitService {
 
     /**
      * 阿里
-     *
      */
     @POST("/")
     Observable<AliPlayBean> aliPlay(@QueryMap WeakHashMap<String, String> map);
 
     /**
      * 微信
-     *
      */
     @POST("/")
     Observable<WeChatBean> weChatPlay(@QueryMap WeakHashMap<String, String> map);
 
     /**
      * 微信登录
-     *
      */
     @POST
     Observable<WeChatModel> getWeChatInfo(@Query("appid") String appid, @Query("secret") String secret,
@@ -158,15 +155,27 @@ public interface RetrofitService {
                                                   @Body RequestBody requestBody);
 
     /**
+     * 创建订单
+     */
+    @Headers({"Content-Type:application/json",
+            "Accept:application/json"})
+    @POST("/api/p/order")
+    Observable<BaseEntry<ResultData>> createOrder(@Header("LT-AppID") String LTAppID,
+                                                  @Header("LT-Token") String LTToken,
+                                                  @Header("LT-T") int LTTime,
+                                                  @Header("Authorization") String Authorization,
+                                                  @Body RequestBody requestBody);
+
+    /**
      * google
      */
     @Headers({"Content-Type:application/json",
             "Accept:application/json"})
     @POST("/api/p/google")
     Observable<BaseEntry<ResultData>> googlePlay(@Header("LT-AppID") String LTAppID,
-                                                @Header("LT-Token") String LTToken,
-                                                @Header("LT-T") int LTTime,
-                                                @Body RequestBody requestBody);
+                                                 @Header("LT-Token") String LTToken,
+                                                 @Header("LT-T") int LTTime,
+                                                 @Body RequestBody requestBody);
 
     /**
      * oneStore
@@ -175,9 +184,9 @@ public interface RetrofitService {
             "Accept:application/json"})
     @POST("/api/p/one-store")
     Observable<BaseEntry<ResultData>> oneStorePlay(@Header("LT-AppID") String LTAppID,
-                                                  @Header("LT-Token") String LTToken,
-                                                  @Header("LT-T") int LTTime,
-                                                  @Body RequestBody requestBody);
+                                                   @Header("LT-Token") String LTToken,
+                                                   @Header("LT-T") int LTTime,
+                                                   @Body RequestBody requestBody);
 
 
 }

@@ -791,6 +791,59 @@ public class LoginBackManager {
                     });
         }
     }
+    /**
+     * 创建订单
+     */
+    public static void createOrder( String LTAppID, String LTAppKey,
+                                   Map<String, Object> params,
+                                   String apiToken,
+                                   final OnCreateOrderListener mListener) {
+        Log.e("GooglePayActivity", "start");
+        if (params != null &&
+                !TextUtils.isEmpty(LTAppID) &&
+                !TextUtils.isEmpty(LTAppKey)&&
+                !TextUtils.isEmpty(apiToken)) {
+            long LTTime = System.currentTimeMillis() / 1000L;
+            String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
+            String json = new Gson().toJson(params);//要传递的json
+            final RequestBody requestBody = RequestBody
+                    .create(okhttp3.MediaType.parse("application/json; charset=utf-8"), json);
+            Api.getInstance(BASE_URL)
+                    .createOrder(LTAppID, LTToken, (int) LTTime, apiToken,requestBody)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<BaseEntry<ResultData>>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(BaseEntry<ResultData> result) {
+                            if (result!=null){
+                                if (result.getCode() == 200) {
+                                    if (result.getData().getLt_order_id() != null) {
+                                        mListener.onOrderSuccess(result.getData().getLt_order_id());
+                                    }
+                                } else {
+                                    mListener.onOrderError(result.getMsg());
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.e("GooglePayActivity", e.getMessage());
+                            mListener.onOrderFailed(e);
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            Log.e("GooglePayActivity", "onComplete");
+                        }
+                    });
+        }
+    }
 
     /**
      * google
