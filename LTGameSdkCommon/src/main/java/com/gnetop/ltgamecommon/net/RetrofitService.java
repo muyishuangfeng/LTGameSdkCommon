@@ -163,7 +163,7 @@ public interface RetrofitService {
     Observable<BaseEntry<ResultData>> createOrder(@Header("LT-AppID") String LTAppID,
                                                   @Header("LT-Token") String LTToken,
                                                   @Header("LT-T") int LTTime,
-                                                  @Header("Authorization") String Authorization,
+                                                  @Header("api_token") String Authorization,
                                                   @Body RequestBody requestBody);
 
     /**
