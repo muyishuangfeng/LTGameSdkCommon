@@ -816,9 +816,9 @@ public class LoginBackManager {
                             }
                         });
             } else {
+                String authorization= "Bearer "+PreferencesUtils.getString(context, Constants.USER_API_TOKEN);
                 Api.getInstance(BASE_URL)
-                        .createOrder(LTAppID, LTToken, (int) LTTime,
-                                PreferencesUtils.getString(context, Constants.USER_API_TOKEN),
+                        .createOrder(LTAppID, LTToken, (int) LTTime,authorization,
                                 requestBody)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
