@@ -9,5 +9,7 @@ public class Constants {
     public static final String USER_LT_UID_TOKEN = "USER_FACEBOOK_LT_UID_TOKEN";
     /***apiToken标志*/
     public static final String USER_API_TOKEN = "USER_API_TOKEN";
+    /***用户的UUID*/
+    public static final String USER_UUID = "USER_UUID";
 
 }

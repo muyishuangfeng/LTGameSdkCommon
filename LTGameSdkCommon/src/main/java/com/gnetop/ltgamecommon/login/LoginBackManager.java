@@ -17,12 +17,14 @@ import com.gnetop.ltgamecommon.model.ResultData;
 import com.gnetop.ltgamecommon.model.WeChatBean;
 import com.gnetop.ltgamecommon.model.WeChatModel;
 import com.gnetop.ltgamecommon.net.Api;
+import com.gnetop.ltgamecommon.util.DeviceUtils;
 import com.gnetop.ltgamecommon.util.MD5Util;
 import com.gnetop.ltgamecommon.util.PreferencesUtils;
 import com.google.gson.Gson;
 
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.concurrent.Executors;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -36,6 +38,24 @@ import okhttp3.RequestBody;
 public class LoginBackManager {
 
     private static final String BASE_URL = "http://korsdk.appcpi.com";
+
+    /**
+     * 获取UUID
+     */
+    public static void getUUID(final Context context) {
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String adid = DeviceUtils.getGoogleAdId(context);
+                    PreferencesUtils.putString(context, Constants.USER_UUID, adid);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
 
     /**
      * 获取验证码
@@ -450,6 +470,8 @@ public class LoginBackManager {
     public static void facebookLogin(final Context context, String LTAppID,
                                      String LTAppKey, Map<String, Object> map,
                                      final OnLoginSuccessListener mListener) {
+
+
         if (!TextUtils.isEmpty(LTAppID) &&
                 !TextUtils.isEmpty(LTAppKey) &&
                 map != null) {
@@ -816,9 +838,9 @@ public class LoginBackManager {
                             }
                         });
             } else {
-                String authorization= "Bearer "+PreferencesUtils.getString(context, Constants.USER_API_TOKEN);
+                String authorization = "Bearer " + PreferencesUtils.getString(context, Constants.USER_API_TOKEN);
                 Api.getInstance(BASE_URL)
-                        .createOrder(LTAppID, LTToken, (int) LTTime,authorization,
+                        .createOrder(LTAppID, LTToken, (int) LTTime, authorization,
                                 requestBody)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
