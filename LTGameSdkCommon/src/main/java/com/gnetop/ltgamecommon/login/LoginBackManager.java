@@ -394,12 +394,12 @@ public class LoginBackManager {
     public static void googleLogin(final Context context, String LTAppID,
                                    String LTAppKey, Map<String, Object> map,
                                    final OnLoginSuccessListener mListener) {
+        getUUID(context);
         if (!TextUtils.isEmpty(LTAppID) &&
                 !TextUtils.isEmpty(LTAppKey) &&
                 map != null) {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
-
             Api.getInstance(BASE_URL)
                     .googleLogin(LTAppID, LTToken, (int) LTTime, map)
                     .subscribeOn(Schedulers.io())
@@ -470,8 +470,7 @@ public class LoginBackManager {
     public static void facebookLogin(final Context context, String LTAppID,
                                      String LTAppKey, Map<String, Object> map,
                                      final OnLoginSuccessListener mListener) {
-
-
+        getUUID(context);
         if (!TextUtils.isEmpty(LTAppID) &&
                 !TextUtils.isEmpty(LTAppKey) &&
                 map != null) {
