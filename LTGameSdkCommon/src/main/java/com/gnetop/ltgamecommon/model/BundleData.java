@@ -10,6 +10,7 @@ public class BundleData implements Serializable {
     private String baseURL;
     private String LTAppID;
     private String LTAppKey;
+    private String adID;
 
     public String getPrivacyUrl() {
         return privacyUrl;
@@ -57,5 +58,13 @@ public class BundleData implements Serializable {
 
     public void setLTAppKey(String LTAppKey) {
         this.LTAppKey = LTAppKey;
+    }
+
+    public String getAdID() {
+        return adID;
+    }
+
+    public void setAdID(String adID) {
+        this.adID = adID;
     }
 }
