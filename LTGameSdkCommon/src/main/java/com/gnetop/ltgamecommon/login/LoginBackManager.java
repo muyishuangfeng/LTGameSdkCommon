@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.gnetop.ltgamecommon.R;
 import com.gnetop.ltgamecommon.base.Constants;
+import com.gnetop.ltgamecommon.impl.OnAutoLoginCheckListener;
 import com.gnetop.ltgamecommon.impl.OnCreateOrderListener;
 import com.gnetop.ltgamecommon.impl.OnGooglePlayResultListener;
 import com.gnetop.ltgamecommon.impl.OnLoginSuccessListener;
@@ -964,6 +965,52 @@ public class LoginBackManager {
                         public void onError(Throwable e) {
                             if (mListener != null) {
                                 mListener.onOneStoreUploadFailed(e);
+                            }
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        }
+    }
+
+    /**
+     * 自动登录验证
+     */
+    public static void autoLoginCheck( String LTAppID, String LTAppKey,
+                                      Map<String, Object> params,
+                                      final OnAutoLoginCheckListener mListener) {
+        if (params != null &&
+                !TextUtils.isEmpty(LTAppID) &&
+                !TextUtils.isEmpty(LTAppKey)) {
+            long LTTime = System.currentTimeMillis() / 1000L;
+            String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
+            String json = new Gson().toJson(params);//要传递的json
+            final RequestBody requestBody = RequestBody.create(okhttp3.MediaType
+                    .parse("application/json; charset=utf-8"), json);
+            Api.getInstance(BASE_URL)
+                    .autoLogin(LTAppID, LTToken, (int) LTTime, requestBody)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<BaseEntry>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(BaseEntry result) {
+                            if (result != null) {
+                                mListener.onCheckSuccess(result);
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (mListener != null) {
+                                mListener.onCheckFailed(e);
                             }
                         }
 

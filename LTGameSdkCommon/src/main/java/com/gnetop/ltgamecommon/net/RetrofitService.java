@@ -188,5 +188,14 @@ public interface RetrofitService {
                                                    @Header("LT-T") int LTTime,
                                                    @Body RequestBody requestBody);
 
-
+    /**
+     * 自动登录验证
+     */
+    @Headers({"Content-Type:application/json",
+            "Accept:application/json"})
+    @POST("/api/auth/login-check")
+    Observable<BaseEntry> autoLogin(@Header("LT-AppID") String LTAppID,
+                                    @Header("LT-Token") String LTToken,
+                                    @Header("LT-T") int LTTime,
+                                    @Body RequestBody requestBody);
 }
