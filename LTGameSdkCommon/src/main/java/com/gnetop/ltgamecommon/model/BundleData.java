@@ -11,6 +11,7 @@ public class BundleData implements Serializable {
     private String LTAppID;
     private String LTAppKey;
     private String mAdID;
+    private String mPackageID;
 
     public String getPrivacyUrl() {
         return privacyUrl;
@@ -66,5 +67,13 @@ public class BundleData implements Serializable {
 
     public void setmAdID(String mAdID) {
         this.mAdID = mAdID;
+    }
+
+    public String getmPackageID() {
+        return mPackageID;
+    }
+
+    public void setmPackageID(String mPackageID) {
+        this.mPackageID = mPackageID;
     }
 }
