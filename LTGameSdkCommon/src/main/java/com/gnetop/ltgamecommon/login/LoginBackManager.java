@@ -38,7 +38,7 @@ import okhttp3.RequestBody;
  */
 public class LoginBackManager {
 
-    private static final String BASE_URL = "http://korsdk.appcpi.com";
+
 
     /**
      * 获取UUID
@@ -74,7 +74,7 @@ public class LoginBackManager {
                 params != null) {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("GET" + LTAppID + LTTime + LTAppKey);
-            Api.getInstance(BASE_URL)
+            Api.getInstance()
                     .getAuthenCode(LTAppID, LTToken, (int) LTTime, params)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -138,7 +138,7 @@ public class LoginBackManager {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
 
-            Api.getInstance(BASE_URL)
+            Api.getInstance()
                     .register(LTAppID, LTToken, (int) LTTime, params)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -202,7 +202,7 @@ public class LoginBackManager {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
 
-            Api.getInstance(BASE_URL)
+            Api.getInstance()
                     .login(LTAppID, LTToken, (int) LTTime, map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -268,7 +268,7 @@ public class LoginBackManager {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
 
-            Api.getInstance(BASE_URL)
+            Api.getInstance()
                     .updatePassword(LTAppID, LTToken, (int) LTTime, map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -336,7 +336,7 @@ public class LoginBackManager {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
 
-            Api.getInstance(BASE_URL)
+            Api.getInstance()
                     .getDeviceInfo(LTAppID, LTToken, (int) LTTime,
                             map)
                     .subscribeOn(Schedulers.io())
@@ -401,7 +401,7 @@ public class LoginBackManager {
                 map != null) {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
-            Api.getInstance(BASE_URL)
+            Api.getInstance()
                     .googleLogin(LTAppID, LTToken, (int) LTTime, map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -478,7 +478,7 @@ public class LoginBackManager {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
 
-            Api.getInstance(BASE_URL)
+            Api.getInstance()
                     .faceBookLogin(LTAppID, LTToken, (int) LTTime, map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -553,7 +553,7 @@ public class LoginBackManager {
                 map != null) {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
-            Api.getInstance(BASE_URL)
+            Api.getInstance()
                     .weChatLogin(LTAppID, LTToken, (int) LTTime, map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -617,7 +617,7 @@ public class LoginBackManager {
             long LTTime = System.currentTimeMillis() / 1000L;
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
 
-            Api.getInstance(BASE_URL)
+            Api.getInstance()
                     .qqLogin(LTAppID, LTToken, (int) LTTime, map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -674,7 +674,7 @@ public class LoginBackManager {
                                       String code, final String LTAppID,
                                       final String LTAppKey,
                                       final OnLoginSuccessListener listener) {
-        Api.getInstance("https://api.weixin.qq.com/sns/oauth2/access_token")
+        Api.getInstance()
                 .getWeChatInfo(appID, appSecret, code,
                         "authorization_code")
                 .subscribeOn(Schedulers.io())
@@ -711,7 +711,7 @@ public class LoginBackManager {
      * 阿里
      */
     public static void aliPlay(String url, WeakHashMap<String, String> map, final OnPlayResultedListener mListener) {
-        Api.getInstance(url)
+        Api.getInstance()
                 .aliPlay(map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -751,7 +751,7 @@ public class LoginBackManager {
      */
     public static void weChatPlay(String url, WeakHashMap<String, String> map,
                                   final OnPlayResultedListener mListener) {
-        Api.getInstance(url)
+        Api.getInstance()
                 .weChatPlay(map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -803,7 +803,7 @@ public class LoginBackManager {
             final RequestBody requestBody = RequestBody
                     .create(okhttp3.MediaType.parse("application/json; charset=utf-8"), json);
             if (TextUtils.isEmpty(PreferencesUtils.getString(context, Constants.USER_API_TOKEN))) {
-                Api.getInstance(BASE_URL)
+                Api.getInstance()
                         .createOrder(LTAppID, LTToken, (int) LTTime, requestBody)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -839,7 +839,7 @@ public class LoginBackManager {
                         });
             } else {
                 String authorization = "Bearer " + PreferencesUtils.getString(context, Constants.USER_API_TOKEN);
-                Api.getInstance(BASE_URL)
+                Api.getInstance()
                         .createOrder(LTAppID, LTToken, (int) LTTime, authorization,
                                 requestBody)
                         .subscribeOn(Schedulers.io())
@@ -894,7 +894,7 @@ public class LoginBackManager {
             String LTToken = MD5Util.md5Decode("POST" + LTAppID + LTTime + LTAppKey);
             String json = new Gson().toJson(params);//要传递的json
             final RequestBody requestBody = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), json);
-            Api.getInstance(BASE_URL)
+            Api.getInstance()
                     .googlePlay(LTAppID, LTToken, (int) LTTime, requestBody)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -943,7 +943,7 @@ public class LoginBackManager {
             String json = new Gson().toJson(params);//要传递的json
             final RequestBody requestBody = RequestBody.create(okhttp3.MediaType
                     .parse("application/json; charset=utf-8"), json);
-            Api.getInstance(BASE_URL)
+            Api.getInstance()
                     .oneStorePlay(LTAppID, LTToken, (int) LTTime, requestBody)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -990,7 +990,7 @@ public class LoginBackManager {
             String json = new Gson().toJson(params);//要传递的json
             final RequestBody requestBody = RequestBody.create(okhttp3.MediaType
                     .parse("application/json; charset=utf-8"), json);
-            Api.getInstance(BASE_URL)
+            Api.getInstance()
                     .autoLogin(LTAppID, LTToken, (int) LTTime, requestBody)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
