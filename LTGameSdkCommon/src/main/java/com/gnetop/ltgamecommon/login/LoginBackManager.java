@@ -39,7 +39,6 @@ import okhttp3.RequestBody;
 public class LoginBackManager {
 
 
-
     /**
      * 获取UUID
      */
@@ -802,42 +801,7 @@ public class LoginBackManager {
             String json = new Gson().toJson(params);//要传递的json
             final RequestBody requestBody = RequestBody
                     .create(okhttp3.MediaType.parse("application/json; charset=utf-8"), json);
-            if (TextUtils.isEmpty(PreferencesUtils.getString(context, Constants.USER_API_TOKEN))) {
-                Api.getInstance()
-                        .createOrder(LTAppID, LTToken, (int) LTTime, requestBody)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Observer<BaseEntry<ResultData>>() {
-                            @Override
-                            public void onSubscribe(Disposable d) {
-
-                            }
-
-                            @Override
-                            public void onNext(BaseEntry<ResultData> result) {
-                                if (result != null) {
-                                    if (result.getCode() == 200) {
-                                        if (result.getData().getLt_order_id() != null) {
-                                            mListener.onOrderSuccess(result.getData().getLt_order_id());
-                                        }
-                                    } else {
-                                        mListener.onOrderError(result.getMsg());
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                Log.e("GooglePayActivity", e.getMessage());
-                                mListener.onOrderFailed(e);
-                            }
-
-                            @Override
-                            public void onComplete() {
-                                Log.e("GooglePayActivity", "onComplete");
-                            }
-                        });
-            } else {
+            if (!TextUtils.isEmpty(PreferencesUtils.getString(context, Constants.USER_API_TOKEN))) {
                 String authorization = "Bearer " + PreferencesUtils.getString(context, Constants.USER_API_TOKEN);
                 Api.getInstance()
                         .createOrder(LTAppID, LTToken, (int) LTTime, authorization,
@@ -874,6 +838,8 @@ public class LoginBackManager {
                                 Log.e("GooglePayActivity", "onComplete");
                             }
                         });
+            } else {
+                mListener.onOrderError("token error");
             }
 
 
@@ -979,7 +945,7 @@ public class LoginBackManager {
     /**
      * 自动登录验证
      */
-    public static void autoLoginCheck( String LTAppID, String LTAppKey,
+    public static void autoLoginCheck(String LTAppID, String LTAppKey,
                                       Map<String, Object> params,
                                       final OnAutoLoginCheckListener mListener) {
         if (params != null &&
