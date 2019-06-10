@@ -413,7 +413,7 @@ public class LoginBackManager {
                         @Override
                         public void onNext(BaseEntry<ResultData> result) {
                             if (result != null) {
-                                if (TextUtils.equals(result.getResult(), "OK")) {
+                                if (result.getCode() == 200) {
                                     if (mListener != null) {
                                         mListener.onSuccess(result);
                                     }
@@ -429,10 +429,9 @@ public class LoginBackManager {
                                         PreferencesUtils.putString(context, Constants.USER_LT_UID_TOKEN,
                                                 result.getData().getLt_uid_token());
                                     }
-
-                                } else if (TextUtils.equals(result.getResult(), "NO")) {
+                                } else {
                                     if (mListener != null) {
-                                        mListener.onError(result.getMsg());
+                                        mListener.onCodeResult(result.getCode());
                                     }
                                 }
                             }
@@ -490,7 +489,7 @@ public class LoginBackManager {
                         @Override
                         public void onNext(BaseEntry<ResultData> result) {
                             if (result != null) {
-                                if (TextUtils.equals(result.getResult(), "OK")) {
+                                if (result.getCode() == 200) {
                                     if (mListener != null) {
                                         mListener.onSuccess(result);
                                     }
@@ -506,9 +505,9 @@ public class LoginBackManager {
                                         PreferencesUtils.putString(context, Constants.USER_LT_UID_TOKEN,
                                                 result.getData().getLt_uid_token());
                                     }
-                                } else if (TextUtils.equals(result.getResult(), "NO")) {
+                                } else {
                                     if (mListener != null) {
-                                        mListener.onError(result.getMsg());
+                                        mListener.onCodeResult(result.getCode());
                                     }
                                 }
                             }
@@ -969,7 +968,9 @@ public class LoginBackManager {
                         @Override
                         public void onNext(BaseEntry result) {
                             if (result != null) {
-                                mListener.onCheckSuccess(result);
+                                if (mListener != null) {
+                                    mListener.onCheckSuccess(result);
+                                }
                             }
                         }
 

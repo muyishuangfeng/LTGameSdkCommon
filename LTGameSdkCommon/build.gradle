@@ -35,7 +35,7 @@ dependencies {
     //Retrofit2
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     //RxJava2Gson适配
-   //implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
+    //implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
     //网络日志拦截
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.0'
     //eventBus

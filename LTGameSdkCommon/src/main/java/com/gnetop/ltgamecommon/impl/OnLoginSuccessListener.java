@@ -41,4 +41,9 @@ public interface OnLoginSuccessListener {
      */
     void onError(String error);
 
+    /**
+     * 封设备
+     */
+    void onCodeResult(int code);
+
 }
